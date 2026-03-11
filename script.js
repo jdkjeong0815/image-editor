@@ -19,8 +19,6 @@ const sliders = {
     brightness: document.getElementById('brightness'),
     contrast: document.getElementById('contrast'),
     saturation: document.getElementById('saturation'),
-    grayscale: document.getElementById('grayscale'),
-    edge: document.getElementById('edge'),
     neonThreshold: document.getElementById('neon-threshold'),
     neonIntensity: document.getElementById('neon-intensity')
 };
@@ -29,8 +27,6 @@ const valueDisplays = {
     brightness: document.getElementById('brightness-val'),
     contrast: document.getElementById('contrast-val'),
     saturation: document.getElementById('saturation-val'),
-    grayscale: document.getElementById('grayscale-val'),
-    edge: document.getElementById('edge-val'),
     neonThreshold: document.getElementById('neon-threshold-val'),
     neonIntensity: document.getElementById('neon-intensity-val')
 };
@@ -437,14 +433,12 @@ function renderFrame(centerX, centerY, zoom) {
     const b = sliders.brightness.value;
     const c = sliders.contrast.value;
     const s = sliders.saturation.value;
-    const g = sliders.grayscale.value;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.filter = `
         brightness(${b}%) 
         contrast(${c}%) 
         saturate(${s}%) 
-        grayscale(${g}%) 
     `;
 
     // Calculate source rectangle
@@ -460,9 +454,7 @@ function renderFrame(centerX, centerY, zoom) {
 
     ctx.drawImage(originalImage, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
 
-    // After drawing base image, apply post-process effects to main ctx
-    const edgeAmount = sliders.edge.value;
-    if (edgeAmount > 0) applyEdgeDetection(edgeAmount / 100);
+
 
     const ni = sliders.neonIntensity.value;
     const nt = sliders.neonThreshold.value;
@@ -506,16 +498,12 @@ function applyFilters() {
     const b = sliders.brightness.value;
     const c = sliders.contrast.value;
     const s = sliders.saturation.value;
-    const g = sliders.grayscale.value;
-    const edgeAmount = sliders.edge.value;
     const nt = sliders.neonThreshold.value;
     const ni = sliders.neonIntensity.value;
 
     valueDisplays.brightness.textContent = `${b}%`;
     valueDisplays.contrast.textContent = `${c}%`;
     valueDisplays.saturation.textContent = `${s}%`;
-    valueDisplays.grayscale.textContent = `${g}%`;
-    valueDisplays.edge.textContent = `${edgeAmount}%`;
     valueDisplays.neonThreshold.textContent = nt;
     valueDisplays.neonIntensity.textContent = `${ni}%`;
 
@@ -530,15 +518,11 @@ function applyFilters() {
         brightness(${b}%) 
         contrast(${c}%) 
         saturate(${s}%) 
-        grayscale(${g}%) 
     `;
 
     ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
 
-    // Apply pixel-based effects (Edge Detection)
-    if (edgeAmount > 0) {
-        applyEdgeDetection(edgeAmount / 100);
-    }
+
 
     // Apply Neon Glow
     if (ni > 0) {
@@ -641,55 +625,12 @@ function applyNeonGlow(threshold, intensity) {
     ctx.putImageData(imgData, 0, 0);
 }
 
-function applyEdgeDetection(amount) {
-    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const pixels = imgData.data;
-    const originalPixels = new Uint8ClampedArray(pixels);
 
-    const w = canvas.width;
-    const h = canvas.height;
-
-    // Sobel operator
-    const gx = [-1, 0, 1, -2, 0, 2, -1, 0, 1];
-    const gy = [-1, -2, -1, 0, 0, 0, 1, 2, 1];
-
-    for (let y = 1; y < h - 1; y++) {
-        for (let x = 1; x < w - 1; x++) {
-            let resX = 0;
-            let resY = 0;
-
-            for (let ky = -1; ky <= 1; ky++) {
-                for (let kx = -1; kx <= 1; kx++) {
-                    const idx = ((y + ky) * w + (x + kx)) * 4;
-                    const r = originalPixels[idx];
-                    const g = originalPixels[idx + 1];
-                    const b = originalPixels[idx + 2];
-                    const gray = (r + g + b) / 3;
-
-                    const kernelIdx = (ky + 1) * 3 + (kx + 1);
-                    resX += gray * gx[kernelIdx];
-                    resY += gray * gy[kernelIdx];
-                }
-            }
-
-            const mag = Math.sqrt(resX * resX + resY * resY);
-            const idx = (y * w + x) * 4;
-
-            // Blend with original
-            pixels[idx] = pixels[idx] * (1 - amount) + mag * amount;
-            pixels[idx + 1] = pixels[idx + 1] * (1 - amount) + mag * amount;
-            pixels[idx + 2] = pixels[idx + 2] * (1 - amount) + mag * amount;
-        }
-    }
-    ctx.putImageData(imgData, 0, 0);
-}
 
 function resetSliders() {
     sliders.brightness.value = 100;
     sliders.contrast.value = 100;
     sliders.saturation.value = 100;
-    sliders.grayscale.value = 0;
-    sliders.edge.value = 0;
     sliders.neonThreshold.value = 200;
     sliders.neonIntensity.value = 0;
     ledToggleBtn.classList.remove('active');
@@ -705,7 +646,6 @@ function toggleLEDMode() {
         sliders.brightness.value = 105; // 110 -> 105
         sliders.contrast.value = 130;
         sliders.saturation.value = 140;
-        sliders.edge.value = 0;
         sliders.neonThreshold.value = 200; // 디폴트
         sliders.neonIntensity.value = 0;   // 디폴트
     } else {
