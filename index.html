@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antigravity Image Studio - 프리미엄 이미지 프로세서</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <i data-lucide="sparkles"></i>
+                <h1>Antigravity Studio</h1>
+            </div>
+            <div class="actions">
+                <button id="dual-monitor-btn" class="secondary-btn">
+                    <i data-lucide="monitor"></i> 듀얼 모니터
+                </button>
+                <button id="download-btn" class="primary-btn">
+                    <i data-lucide="download"></i> 저장하기
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <section class="editor-area">
+                <div class="canvas-wrapper">
+                    <canvas id="main-canvas"></canvas>
+                    <div id="led-overlay" class="led-overlay"></div>
+                    <div id="slide-progress-container" class="slide-progress-container">
+                        <div id="slide-progress-bar" class="slide-progress-bar"></div>
+                    </div>
+                </div>
+            </section>
+
+            <aside class="controls-panel">
+                <div class="panel-header">
+                    <h2>이미지 효과</h2>
+                    <div class="header-actions">
+                        <button id="led-toggle-btn" title="LED 전광판 최적화">LED 전광판</button>
+                        <button id="reset-btn" title="초기화"><i data-lucide="rotate-ccw"></i></button>
+                    </div>
+                </div>
+
+                <div class="control-groups">
+                    <div class="control-group">
+                        <label>기본 조정</label>
+                        <div class="slider-item">
+                            <span class="label">밝기</span>
+                            <input type="range" id="brightness" min="0" max="200" value="100">
+                            <span class="value" id="brightness-val">100%</span>
+                        </div>
+                        <div class="slider-item">
+                            <span class="label">대비</span>
+                            <input type="range" id="contrast" min="0" max="200" value="100">
+                            <span class="value" id="contrast-val">100%</span>
+                        </div>
+                        <div class="slider-item">
+                            <span class="label">채도</span>
+                            <input type="range" id="saturation" min="0" max="200" value="100">
+                            <span class="value" id="saturation-val">100%</span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>필터 효과</label>
+                        <div class="slider-item">
+                            <span class="label">그레이스케일</span>
+                            <input type="range" id="grayscale" min="0" max="100" value="0">
+                            <span class="value" id="grayscale-val">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>특수 스타일</label>
+                        <div class="slider-item">
+                            <span class="label">라인 스타일 (엣지)</span>
+                            <input type="range" id="edge" min="0" max="100" value="0">
+                            <span class="value" id="edge-val">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>네온 효과 (Neon Glow)</label>
+                        <div class="slider-item">
+                            <span class="label">밝기 임계값 (Threshold)</span>
+                            <input type="range" id="neon-threshold" min="0" max="255" value="200">
+                            <span class="value" id="neon-threshold-val">200</span>
+                        </div>
+                        <div class="slider-item">
+                            <span class="label">네온 강도 (Intensity)</span>
+                            <input type="range" id="neon-intensity" min="0" max="100" value="0">
+                            <span class="value" id="neon-intensity-val">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>시네마틱 경로 (Cinematic)</label>
+                        <div class="slider-item" style="gap: 8px;">
+                            <div class="header-actions">
+                                <button id="set-points-btn" class="secondary-btn"
+                                    style="flex: 1; padding: 6px; font-size: 0.75rem;">포인트 지정 (0/4)</button>
+                                <button id="play-animation-btn" class="primary-btn"
+                                    style="flex: 1; padding: 6px; font-size: 0.75rem;" disabled>애니메이션 재생</button>
+                            </div>
+                        </div>
+                        <div class="slider-item">
+                            <span class="label">속도 보정 (±25초)</span>
+                            <input type="range" id="anim-speed" min="-5" max="5" value="0">
+                            <span class="value" id="anim-speed-val">0</span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label>슬라이드쇼 설정 (Slideshow)</label>
+                        <div class="slider-item">
+                            <span class="label">슬라이드 간격 (초)</span>
+                            <input type="range" id="slide-interval" min="5" max="60" value="10" step="5">
+                            <span class="value" id="slide-interval-val">10s</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>
