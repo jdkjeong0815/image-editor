@@ -238,6 +238,12 @@ main {
     z-index: 101;
 }
 
+.control-group:last-child .slider-item {
+    background: transparent;
+    border-color: transparent;
+    padding: 0 10px; /* Optional: adjust padding since border/bg is removed */
+}
+
 .slider-item .label {
     font-size: 0.9rem;
     color: var(--text-primary);
