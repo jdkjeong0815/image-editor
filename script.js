@@ -657,7 +657,7 @@ function toggleLEDMode() {
 function downloadImage() {
     if (!originalImage) return;
     const link = document.createElement('a');
-    link.download = 'antigravity-edited.png';
+    link.download = 'ledcanvas-edited.png';
     link.href = canvas.toDataURL('image/png');
     link.click();
 }
